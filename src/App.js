@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import actioncable from 'actioncable';
 
 function App() {
+  const cable = actioncable.createConsumer('ws://localhost:3000/cable');
+    
+  cable.subscriptions.create(
+    {
+      channel: 'RoomChannel',
+    },
+    {
+      connected: () => { console.log('Room Channel connected!'); },
+      disconnected: () => { console.log('Room Channel disconnected!'); },
+      received: (data) => {
+        console.log(data);
+      },
+    },
+  );
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>App room</h1>
     </div>
   );
 }
